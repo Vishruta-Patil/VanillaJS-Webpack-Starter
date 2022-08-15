@@ -3,11 +3,13 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const webpackConfig = {
   entry: path.resolve(__dirname, "src", "index.js"),
+
   output: {
-    filename: "main.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
-    clean: true
+    clean: true,
   },
+
   module: {
     rules: [
       {
@@ -30,12 +32,27 @@ const webpackConfig = {
       },
     ],
   },
+
   plugins: [
     new HtmlWebpackPlugin({
-        title: "VanillaJS Webpack Starter",
-        template: path.resolve(__dirname, "src", "index.html")
-    })
-],
+      title: "VanillaJS Webpack Starter",
+      template: path.resolve(__dirname, "src", "index.html"),
+    }),
+  ],
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        node_vendors: {
+          name: "vendor",
+          test: /[\\/]node_modules[\\/]/,
+          chunks: "all",
+          priority: 1,
+        },
+      },
+    },
+  },
+
   mode: "production",
 };
 
